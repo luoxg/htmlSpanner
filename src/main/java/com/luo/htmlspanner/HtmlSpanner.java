@@ -18,13 +18,26 @@ package com.luo.htmlspanner;
 
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+
 import com.luo.htmlspanner.exception.ParsingCancelledException;
-import com.luo.htmlspanner.handlers.*;
+import com.luo.htmlspanner.handlers.FontHandler;
+import com.luo.htmlspanner.handlers.HeaderHandler;
+import com.luo.htmlspanner.handlers.ImageHandler;
+import com.luo.htmlspanner.handlers.LinkHandler;
+import com.luo.htmlspanner.handlers.ListItemHandler;
+import com.luo.htmlspanner.handlers.MonoSpaceHandler;
+import com.luo.htmlspanner.handlers.NewLineHandler;
+import com.luo.htmlspanner.handlers.PreHandler;
+import com.luo.htmlspanner.handlers.StyleNodeHandler;
+import com.luo.htmlspanner.handlers.StyledTextHandler;
+import com.luo.htmlspanner.handlers.SubScriptHandler;
+import com.luo.htmlspanner.handlers.SuperScriptHandler;
 import com.luo.htmlspanner.handlers.attributes.AlignmentAttributeHandler;
 import com.luo.htmlspanner.handlers.attributes.BorderAttributeHandler;
 import com.luo.htmlspanner.handlers.attributes.StyleAttributeHandler;
 import com.luo.htmlspanner.style.Style;
 import com.luo.htmlspanner.style.StyleValue;
+
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.HtmlCleaner;
@@ -46,6 +59,8 @@ import java.util.Map;
  * @author work
  */
 public class HtmlSpanner {
+    public static final String SCRIPT_TAG = "script";
+    public static final String TITLE_TAG = "title";
 
     /**
      * Temporary constant for the width of 1 horizontal em
@@ -72,6 +87,7 @@ public class HtmlSpanner {
      */
     private boolean useColoursFromStyle = true;
 
+    private String title;
 
     /**
      * Creates a new HtmlSpanner using a default HtmlCleaner instance.
@@ -185,6 +201,14 @@ public class HtmlSpanner {
         this.handlers.remove(tagName);
     }
 
+    public HtmlCleaner getHtmlCleaner() {
+        return htmlCleaner;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     /**
      * Parses the text in the given String.
      *
@@ -255,9 +279,33 @@ public class HtmlSpanner {
 
         stack.applySpans(this, result);
 
+        result = trimEndsEmptyLine(result);
+
         return result;
     }
 
+    //移除开头末尾换行
+    private SpannableStringBuilder trimEndsEmptyLine(SpannableStringBuilder result) {
+        if (result.length() <= 2) {
+            return result;
+        }
+
+        int start = 0;
+        while (start < result.length()) {
+            if (result.charAt(start) != '\n') {
+                break;
+            }
+            start++;
+        }
+        int end = result.length();
+        while (end > start) {
+            if (result.charAt(end - 1) != '\n') {
+                break;
+            }
+            end--;
+        }
+        return (SpannableStringBuilder) result.subSequence(start,end);
+    }
 
     private static HtmlCleaner createHtmlCleaner() {
         HtmlCleaner result = new HtmlCleaner();
@@ -275,7 +323,7 @@ public class HtmlSpanner {
         cleanerProperties.setIgnoreQuestAndExclam(true);
         cleanerProperties.setUseEmptyElementTags(false);
 
-        cleanerProperties.setPruneTags("script,title");
+        cleanerProperties.setPruneTags(SCRIPT_TAG);
 
         return result;
     }
@@ -326,6 +374,9 @@ public class HtmlSpanner {
                 if (childNode instanceof ContentNode) {
                     handleContent(builder, childNode, stack, cancellationCallback);
                 } else if (childNode instanceof TagNode) {
+                    if (findTitle((TagNode) childNode)) {
+                        continue;
+                    }
                     applySpan(builder, (TagNode) childNode, stack, cancellationCallback);
                 }
             }
@@ -335,6 +386,22 @@ public class HtmlSpanner {
         handler.handleTagNode(node, builder, lengthBefore, lengthAfter, stack);
     }
 
+    //查找html  title
+    private boolean findTitle(TagNode tagNode) {
+        if (TITLE_TAG.equalsIgnoreCase(tagNode.getName())) {
+            for (Object childNode : tagNode.getChildren()) {
+                if (childNode instanceof ContentNode) {
+                    ContentNode contentNode = (ContentNode) childNode;
+                    String text = TextUtil.replaceHtmlEntities(contentNode.getContent().toString(), true);
+                    text = text.replace('\u00A0', ' ');
+                    title = text;
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     private static StyledTextHandler wrap(StyledTextHandler handler) {
         return new StyleAttributeHandler(new AlignmentAttributeHandler(handler));

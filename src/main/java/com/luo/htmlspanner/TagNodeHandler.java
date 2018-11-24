@@ -16,6 +16,7 @@
 package com.luo.htmlspanner;
 
 import android.text.SpannableStringBuilder;
+
 import org.htmlcleaner.TagNode;
 
 /**

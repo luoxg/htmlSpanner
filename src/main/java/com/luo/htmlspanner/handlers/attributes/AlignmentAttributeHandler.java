@@ -15,10 +15,13 @@
  */
 package com.luo.htmlspanner.handlers.attributes;
 
+
 import android.text.SpannableStringBuilder;
+
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.handlers.StyledTextHandler;
 import com.luo.htmlspanner.style.Style;
+
 import org.htmlcleaner.TagNode;
 
 /**

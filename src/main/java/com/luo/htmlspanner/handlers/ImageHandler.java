@@ -21,8 +21,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.TagNodeHandler;
+
 import org.htmlcleaner.TagNode;
 
 import java.io.IOException;

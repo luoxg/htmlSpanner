@@ -1,11 +1,13 @@
 package com.luo.htmlspanner.handlers.attributes;
 
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.handlers.StyledTextHandler;
 import com.luo.htmlspanner.spans.BorderSpan;
 import com.luo.htmlspanner.style.Style;
+
 import org.htmlcleaner.TagNode;
 
 /**
@@ -17,6 +19,8 @@ import org.htmlcleaner.TagNode;
  */
 public class BorderAttributeHandler extends WrappingStyleHandler {
 
+    private static final String TAG = "BorderAttributeHandler";
+
     public BorderAttributeHandler(StyledTextHandler handler) {
         super(handler);
     }
@@ -25,7 +29,7 @@ public class BorderAttributeHandler extends WrappingStyleHandler {
     public void handleTagNode(TagNode node, SpannableStringBuilder builder, int start, int end, Style useStyle, SpanStack spanStack) {
 
         if (node.getAttributeByName("border") != null) {
-            Log.d("BorderAttributeHandler", "Adding BorderSpan from " + start + " to " + end);
+            LogUtil.d(TAG, "Adding BorderSpan from " + start + " to " + end);
             spanStack.pushSpan(new BorderSpan(useStyle, start, end, getSpanner().isUseColoursFromStyle()), start, end);
         }
         super.handleTagNode(node, builder, start, end, useStyle, spanStack);

@@ -17,10 +17,12 @@
 package com.luo.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
+
 import com.luo.htmlspanner.FontFamily;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.css.CSSCompiler;
 import com.luo.htmlspanner.style.Style;
+
 import org.htmlcleaner.TagNode;
 
 /**

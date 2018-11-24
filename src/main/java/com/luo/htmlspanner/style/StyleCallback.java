@@ -2,12 +2,22 @@ package com.luo.htmlspanner.style;
 
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.*;
-import android.util.Log;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.AlignmentSpan;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.LeadingMarginSpan;
+import android.text.style.RelativeSizeSpan;
+
 import com.luo.htmlspanner.FontFamily;
 import com.luo.htmlspanner.HtmlSpanner;
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.SpanCallback;
-import com.luo.htmlspanner.spans.*;
+import com.luo.htmlspanner.spans.AlignNormalSpan;
+import com.luo.htmlspanner.spans.AlignOppositeSpan;
+import com.luo.htmlspanner.spans.BorderSpan;
+import com.luo.htmlspanner.spans.CenterSpan;
+import com.luo.htmlspanner.spans.FontFamilySpan;
 
 import static java.lang.Math.min;
 
@@ -20,11 +30,13 @@ import static java.lang.Math.min;
  */
 public class StyleCallback implements SpanCallback {
 
+    private static final String TAG = "StyleCallback";
+    
     private int start;
     private int end;
 
     private FontFamily defaultFont;
-    private Style useStyle;
+    private Style      useStyle;
 
     public StyleCallback(FontFamily defaultFont, Style style, int start, int end) {
         this.defaultFont = defaultFont;
@@ -61,15 +73,15 @@ public class StyleCallback implements SpanCallback {
                 newSpan.setItalic(originalSpan.isItalic());
             }
 
-            //Log.d("StyleCallback", "Applying FontFamilySpan from " + start + " to " + end + " on text " + builder.subSequence(start, end));
-            //Log.d("StyleCallback", "FontFamilySpan: " + newSpan );
+            LogUtil.d(TAG, "Applying FontFamilySpan from " + start + " to " + end + " on text " + builder.subSequence(start, end));
+            LogUtil.d(TAG, "FontFamilySpan: " + newSpan );
 
             builder.setSpan(newSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         //If there's no border, we use a BackgroundColorSpan to draw colour behind the text
         if (spanner.isUseColoursFromStyle() && useStyle.getBackgroundColor() != null && useStyle.getBorderStyle() == null) {
-            //Log.d("StyleCallback", "Applying BackgroundColorSpan with color " + useStyle.getBackgroundColor() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
+            LogUtil.d(TAG, "Applying BackgroundColorSpan with color " + useStyle.getBackgroundColor() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
             builder.setSpan(new BackgroundColorSpan(useStyle.getBackgroundColor()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
@@ -84,19 +96,19 @@ public class StyleCallback implements SpanCallback {
 
             if (styleValue.getUnit() == StyleValue.Unit.PX) {
                 if (styleValue.getIntValue() > 0) {
-                    // Log.d("StyleCallback", "Applying AbsoluteSizeSpan with size " + useStyle.getAbsoluteFontSize() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
+                    LogUtil.d(TAG, "Applying AbsoluteSizeSpan with size " + useStyle.getFontSize() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
                     builder.setSpan(new AbsoluteSizeSpan(styleValue.getIntValue()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } else {
                 if (styleValue.getFloatValue() > 0f) {
-                    //Log.d("StyleCallback", "Applying RelativeSizeSpan with size " + useStyle.getRelativeFontSize() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
+                    LogUtil.d(TAG, "Applying RelativeSizeSpan with size " + useStyle.getFontSize() + " from " + start + " to " + end + " on text " + builder.subSequence(start, end));
                     builder.setSpan(new RelativeSizeSpan(styleValue.getFloatValue()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
 
         if (spanner.isUseColoursFromStyle() && useStyle.getColor() != null) {
-            //Log.d("StyleCallback", "Applying ForegroundColorSpan from " + start + " to " + end + " on text " + builder.subSequence(start, end) );
+            LogUtil.d(TAG, "Applying ForegroundColorSpan from " + start + " to " + end + " on text " + builder.subSequence(start, end) );
             builder.setSpan(new ForegroundColorSpan(useStyle.getColor()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
@@ -116,7 +128,7 @@ public class StyleCallback implements SpanCallback {
                     break;
             }
 
-            //Log.d("StyleCallback", "Applying AlignmentSpan from " + start + " to " + end + " on text " + builder.subSequence(start, end) );
+            LogUtil.d(TAG, "Applying AlignmentSpan from " + start + " to " + end + " on text " + builder.subSequence(start, end) );
             builder.setSpan(alignSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
@@ -133,7 +145,7 @@ public class StyleCallback implements SpanCallback {
 
             int marginEnd = min(end, marginStart + 1);
 
-            Log.d("StyleCallback", "Applying LeadingMarginSpan from " + marginStart + " to " + marginEnd + " on text " + builder.subSequence(marginStart, marginEnd));
+            LogUtil.d(TAG, "Applying LeadingMarginSpan from " + marginStart + " to " + marginEnd + " on text " + builder.subSequence(marginStart, marginEnd));
 
             if (styleValue.getUnit() == StyleValue.Unit.PX) {
                 if (styleValue.getIntValue() > 0) {

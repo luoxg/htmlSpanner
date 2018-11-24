@@ -1,5 +1,6 @@
 package com.luo.htmlspanner.style;
 
+
 import com.luo.htmlspanner.FontFamily;
 
 /**
@@ -24,8 +25,8 @@ public class Style {
 
     public static enum BorderStyle {SOLID, DASHED, DOTTED, DOUBLE}
 
-    private final FontFamily fontFamily;
-    private final TextAlignment textAlignment;
+    private final FontFamily                                     fontFamily;
+    private final TextAlignment                                  textAlignment;
     private final StyleValue fontSize;
 
     private final FontWeight fontWeight;
@@ -35,8 +36,8 @@ public class Style {
     private final Integer backgroundColor;
     private final Integer borderColor;
 
-    private final DisplayStyle displayStyle;
-    private final BorderStyle borderStyle;
+    private final DisplayStyle                                   displayStyle;
+    private final BorderStyle                                    borderStyle;
     private final StyleValue borderWidth;
 
     private final StyleValue textIndent;
@@ -130,11 +131,11 @@ public class Style {
     }
 
     public Style setMarginLeft(StyleValue marginLeft) {
-        return new Style(fontFamily, this.textAlignment, this.fontSize, this.fontWeight, fontStyle, this.color, this.backgroundColor, this.displayStyle, this.marginTop, this.marginBottom, marginLeft, this.marginRight, this.textIndent, this.borderColor, this.borderStyle, this.borderWidth);
+        return new Style(this.fontFamily, this.textAlignment, this.fontSize, this.fontWeight, fontStyle, this.color, this.backgroundColor, this.displayStyle, this.marginTop, this.marginBottom, marginLeft, this.marginRight, this.textIndent, this.borderColor, this.borderStyle, this.borderWidth);
     }
 
     public Style setMarginRight(StyleValue marginRight) {
-        return new Style(fontFamily, this.textAlignment, this.fontSize, this.fontWeight, fontStyle, this.color, this.backgroundColor, this.displayStyle, this.marginTop, this.marginBottom, this.marginLeft, marginRight, this.textIndent, this.borderColor, this.borderStyle, this.borderWidth);
+        return new Style(this.fontFamily, this.textAlignment, this.fontSize, this.fontWeight, fontStyle, this.color, this.backgroundColor, this.displayStyle, this.marginTop, this.marginBottom, this.marginLeft, marginRight, this.textIndent, this.borderColor, this.borderStyle, this.borderWidth);
     }
 
     public Style setTextIndent(StyleValue textIndent) {

@@ -18,8 +18,10 @@ package com.luo.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
 import android.text.style.URLSpan;
+
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.TagNodeHandler;
+
 import org.htmlcleaner.TagNode;
 
 /**

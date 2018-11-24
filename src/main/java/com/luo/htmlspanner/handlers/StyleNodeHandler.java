@@ -1,12 +1,14 @@
 package com.luo.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
-import android.util.Log;
-import com.osbcp.cssparser.CSSParser;
-import com.osbcp.cssparser.Rule;
+
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.TagNodeHandler;
 import com.luo.htmlspanner.css.CSSCompiler;
+import com.osbcp.cssparser.CSSParser;
+import com.osbcp.cssparser.Rule;
+
 import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.TagNode;
 
@@ -15,6 +17,8 @@ import org.htmlcleaner.TagNode;
  */
 public class StyleNodeHandler extends TagNodeHandler {
 
+    private static final String TAG = "StyleNodeHandler";
+    
     @Override
     public void handleTagNode(TagNode node, SpannableStringBuilder builder, int start, int end, SpanStack spanStack) {
 
@@ -37,7 +41,7 @@ public class StyleNodeHandler extends TagNodeHandler {
                 spanStack.registerCompiledRule(CSSCompiler.compile(rule, getSpanner()));
             }
         } catch (Exception e) {
-            Log.e("StyleNodeHandler", "Unparseable CSS definition", e);
+            LogUtil.e(TAG, "Unparseable CSS definition", e);
         }
     }
 

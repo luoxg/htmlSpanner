@@ -16,11 +16,13 @@
 package com.luo.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
+
 import com.luo.htmlspanner.FontFamily;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.TagNodeHandler;
 import com.luo.htmlspanner.TextUtil;
 import com.luo.htmlspanner.spans.FontFamilySpan;
+
 import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.TagNode;
 

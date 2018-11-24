@@ -21,7 +21,9 @@ import android.graphics.Paint;
 import android.text.Layout;
 import android.text.Spanned;
 import android.text.style.LeadingMarginSpan;
+
 import com.luo.htmlspanner.HtmlSpanner;
+
 
 /**
  * This class is similar to Android's BulletSpan with the following differences:

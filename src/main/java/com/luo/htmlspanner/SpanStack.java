@@ -2,12 +2,19 @@ package com.luo.htmlspanner;
 
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+
 import com.luo.htmlspanner.css.CompiledRule;
 import com.luo.htmlspanner.style.Style;
+
 import org.htmlcleaner.TagNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Simple stack structure that Spans can be pushed on.
@@ -17,6 +24,8 @@ import java.util.*;
  * @author Alex Kuiper
  */
 public class SpanStack {
+
+    private static final String TAG = "SpanStack";
 
     private Stack<SpanCallback> spanItemStack = new Stack<SpanCallback>();
 
@@ -32,7 +41,7 @@ public class SpanStack {
 
         if (!lookupCache.containsKey(node)) {
 
-            Log.v("SpanStack", "Looking for matching CSS rules for node: " + "<" + node.getName() + " id='" + option(node.getAttributeByName("id")) + "' class='" + option(node.getAttributeByName("class")) + "'>");
+            LogUtil.v(TAG, "Looking for matching CSS rules for node: " + "<" + node.getName() + " id='" + option(node.getAttributeByName("id")) + "' class='" + option(node.getAttributeByName("class")) + "'>");
 
             List<CompiledRule> matchingRules = new ArrayList<CompiledRule>();
             for (CompiledRule rule : rules) {
@@ -41,7 +50,7 @@ public class SpanStack {
                 }
             }
 
-            Log.v("SpanStack", "Found " + matchingRules.size() + " matching rules.");
+            LogUtil.v(TAG, "Found " + matchingRules.size() + " matching rules.");
             lookupCache.put(node, matchingRules);
         }
 
@@ -49,13 +58,13 @@ public class SpanStack {
 
         for (CompiledRule rule : lookupCache.get(node)) {
 
-            Log.v("SpanStack", "Applying rule " + rule);
+            LogUtil.v(TAG, "Applying rule " + rule);
 
             Style original = result;
             result = rule.applyStyle(result);
 
-            Log.v("SpanStack", "Original style: " + original);
-            Log.v("SpanStack", "Resulting style: " + result);
+            LogUtil.v(TAG, "Original style: " + original);
+            LogUtil.v(TAG, "Resulting style: " + result);
         }
 
         return result;
@@ -81,7 +90,7 @@ public class SpanStack {
 
             spanItemStack.push(callback);
         } else {
-            Log.d("SpanStack", "refusing to put span of type " + span.getClass().getSimpleName() + " and length " + (end - start));
+            LogUtil.d(TAG, "refusing to put span of type " + span.getClass().getSimpleName() + " and length " + (end - start));
         }
     }
 

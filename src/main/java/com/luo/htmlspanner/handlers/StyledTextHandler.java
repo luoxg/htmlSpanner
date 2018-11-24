@@ -1,13 +1,15 @@
 package com.luo.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.TagNodeHandler;
 import com.luo.htmlspanner.spans.VerticalMarginSpan;
 import com.luo.htmlspanner.style.Style;
 import com.luo.htmlspanner.style.StyleCallback;
 import com.luo.htmlspanner.style.StyleValue;
+
 import org.htmlcleaner.TagNode;
 
 /**
@@ -16,6 +18,8 @@ import org.htmlcleaner.TagNode;
  * @author Alex Kuiper
  */
 public class StyledTextHandler extends TagNodeHandler {
+
+    private static final String TAG = "StyledTextHandler";
 
     private Style style;
 
@@ -105,7 +109,7 @@ public class StyledTextHandler extends TagNodeHandler {
         if (builder.length() > start) {
             stack.pushSpan(new StyleCallback(getSpanner().getFontResolver().getDefaultFont(), useStyle, start, builder.length()));
         } else {
-            Log.d("StyledTextHandler", "Refusing to push span of length " + (builder.length() - start));
+            LogUtil.d(TAG, "Refusing to push span of length " + (builder.length() - start));
         }
     }
 }

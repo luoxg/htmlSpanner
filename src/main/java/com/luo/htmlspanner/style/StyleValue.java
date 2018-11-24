@@ -1,6 +1,7 @@
 package com.luo.htmlspanner.style;
 
-import android.util.Log;
+
+import com.luo.htmlspanner.LogUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,9 +12,10 @@ import android.util.Log;
  */
 public class StyleValue {
 
+    private static final String TAG = "StyleValue";
+
     public static enum Unit {PX, EM, PERCENTAGE}
 
-    ;
 
     private Integer intValue;
     private Float floatValue;
@@ -32,20 +34,20 @@ public class StyleValue {
                 final Integer intValue = Integer.parseInt(value.substring(0, value.length() - 2));
                 return new StyleValue(intValue);
             } catch (NumberFormatException nfe) {
-                Log.e("StyleValue", "Can't parse value: " + value);
+                LogUtil.e(TAG, "Can't parse value: " + value);
                 return null;
             }
         }
 
         if (value.endsWith("%")) {
-            Log.d("StyleValue", "translating percentage " + value);
+            LogUtil.d(TAG, "translating percentage " + value);
             try {
                 final int percentage = Integer.parseInt(value.substring(0, value.length() - 1));
                 final float floatValue = percentage / 100f;
 
                 return new StyleValue(floatValue, Unit.PERCENTAGE);
             } catch (NumberFormatException nfe) {
-                Log.e("StyleValue", "Can't parse font-size: " + value);
+                LogUtil.e(TAG, "Can't parse font-size: " + value);
                 return null;
             }
         }
@@ -55,7 +57,7 @@ public class StyleValue {
                 final Float number = Float.parseFloat(value.substring(0, value.length() - 2));
                 return new StyleValue(number, Unit.EM);
             } catch (NumberFormatException nfe) {
-                Log.e("CSSCompiler", "Can't parse value: " + value);
+                LogUtil.e(TAG, "Can't parse value: " + value);
                 return null;
             }
         }

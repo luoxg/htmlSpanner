@@ -1,4 +1,5 @@
 # 原库来自 https://github.com/NightWhistler/HtmlSpanner，为了需求，修改一点东西
+
 空标签不进行换行处理（StyledTextHandler-handleTagNode-if (end > start)），保持标签中的空格(HtmlSpanner-handleContent-295行参数改为true)
 
 

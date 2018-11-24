@@ -3,10 +3,12 @@ package com.luo.htmlspanner.spans;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
-import android.util.Log;
+
 import com.luo.htmlspanner.HtmlSpanner;
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.style.Style;
 import com.luo.htmlspanner.style.StyleValue;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +19,8 @@ import com.luo.htmlspanner.style.StyleValue;
  */
 public class BorderSpan implements LineBackgroundSpan {
 
+    private static final String TAG = "BorderSpan";
+    
     private int start;
     private int end;
 
@@ -85,12 +89,12 @@ public class BorderSpan implements LineBackgroundSpan {
         p.setStyle(Paint.Style.STROKE);
 
         if (start <= this.start) {
-            Log.d("BorderSpan", "Drawing first line");
+            LogUtil.d(TAG, "Drawing first line");
             c.drawLine(left, top, right, top, p);
         }
 
         if (end >= this.end) {
-            Log.d("BorderSpan", "Drawing last line");
+            LogUtil.d(TAG, "Drawing last line");
             c.drawLine(left, bottom, right, bottom, p);
         }
 

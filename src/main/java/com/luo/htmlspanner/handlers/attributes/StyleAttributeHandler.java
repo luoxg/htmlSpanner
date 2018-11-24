@@ -1,17 +1,21 @@
 package com.luo.htmlspanner.handlers.attributes;
 
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+
+import com.luo.htmlspanner.LogUtil;
 import com.luo.htmlspanner.SpanStack;
 import com.luo.htmlspanner.css.CSSCompiler;
 import com.luo.htmlspanner.handlers.StyledTextHandler;
 import com.luo.htmlspanner.style.Style;
+
 import org.htmlcleaner.TagNode;
 
 /**
  * Handler which parses style attributes and modifies the style accordingly.
  */
 public class StyleAttributeHandler extends WrappingStyleHandler {
+
+    private static final String TAG = "StyleAttributeHandler";
 
     public StyleAttributeHandler(StyledTextHandler wrapHandler) {
         super(wrapHandler);
@@ -40,7 +44,7 @@ public class StyleAttributeHandler extends WrappingStyleHandler {
             String[] keyVal = pair.split(":");
 
             if (keyVal.length != 2) {
-                Log.e("StyleAttributeHandler", "Could not parse attribute: " + attribute);
+                LogUtil.e(TAG, "Could not parse attribute: " + attribute);
                 return baseStyle;
             }
 

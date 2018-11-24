@@ -16,9 +16,11 @@
 
 package com.luo.htmlspanner.spans;
 
+
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.text.style.TypefaceSpan;
+
 import com.luo.htmlspanner.FontFamily;
 
 public class FontFamilySpan extends TypefaceSpan {

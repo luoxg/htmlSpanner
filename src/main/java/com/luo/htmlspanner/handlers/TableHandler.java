@@ -13,17 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.luo.htmlspanner.handlers;
+package net.nightwhistler.htmlspanner.handlers;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
-import android.text.*;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.style.AlignmentSpan;
 import android.text.style.ImageSpan;
-import com.luo.htmlspanner.SpanStack;
-import com.luo.htmlspanner.TagNodeHandler;
+
+import net.nightwhistler.htmlspanner.SpanStack;
+import net.nightwhistler.htmlspanner.TagNodeHandler;
+
 import org.htmlcleaner.TagNode;
 
 import java.util.ArrayList;

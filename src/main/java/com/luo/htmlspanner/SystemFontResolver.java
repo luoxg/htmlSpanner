@@ -1,7 +1,6 @@
 package com.luo.htmlspanner;
 
 import android.graphics.Typeface;
-import android.util.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +10,8 @@ import android.util.Log;
  * To change this template use File | Settings | File Templates.
  */
 public class SystemFontResolver implements FontResolver {
+
+    private static final String TAG = "SystemFontResolver";
 
     private FontFamily defaultFont;
 
@@ -84,7 +85,7 @@ public class SystemFontResolver implements FontResolver {
 
     protected FontFamily resolveFont(String name) {
 
-        Log.d("SystemFontResolver", "Trying to resolve font " + name);
+        LogUtil.d(TAG, "Trying to resolve font " + name);
 
         if (name.equalsIgnoreCase("serif")) {
             return getSerifFont();
