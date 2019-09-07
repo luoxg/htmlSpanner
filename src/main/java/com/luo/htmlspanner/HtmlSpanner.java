@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package com.luo.htmlspanner;
+package net.nightwhistler.htmlspanner;
 
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 
-import com.luo.htmlspanner.exception.ParsingCancelledException;
-import com.luo.htmlspanner.handlers.FontHandler;
-import com.luo.htmlspanner.handlers.HeaderHandler;
-import com.luo.htmlspanner.handlers.ImageHandler;
-import com.luo.htmlspanner.handlers.LinkHandler;
-import com.luo.htmlspanner.handlers.ListItemHandler;
-import com.luo.htmlspanner.handlers.MonoSpaceHandler;
-import com.luo.htmlspanner.handlers.NewLineHandler;
-import com.luo.htmlspanner.handlers.PreHandler;
-import com.luo.htmlspanner.handlers.StyleNodeHandler;
-import com.luo.htmlspanner.handlers.StyledTextHandler;
-import com.luo.htmlspanner.handlers.SubScriptHandler;
-import com.luo.htmlspanner.handlers.SuperScriptHandler;
-import com.luo.htmlspanner.handlers.attributes.AlignmentAttributeHandler;
-import com.luo.htmlspanner.handlers.attributes.BorderAttributeHandler;
-import com.luo.htmlspanner.handlers.attributes.StyleAttributeHandler;
-import com.luo.htmlspanner.style.Style;
-import com.luo.htmlspanner.style.StyleValue;
+import net.nightwhistler.htmlspanner.exception.ParsingCancelledException;
+import net.nightwhistler.htmlspanner.handlers.FontHandler;
+import net.nightwhistler.htmlspanner.handlers.HeaderHandler;
+import net.nightwhistler.htmlspanner.handlers.ImageHandler;
+import net.nightwhistler.htmlspanner.handlers.LinkHandler;
+import net.nightwhistler.htmlspanner.handlers.ListItemHandler;
+import net.nightwhistler.htmlspanner.handlers.MonoSpaceHandler;
+import net.nightwhistler.htmlspanner.handlers.NewLineHandler;
+import net.nightwhistler.htmlspanner.handlers.PreHandler;
+import net.nightwhistler.htmlspanner.handlers.StyleNodeHandler;
+import net.nightwhistler.htmlspanner.handlers.StyledTextHandler;
+import net.nightwhistler.htmlspanner.handlers.SubScriptHandler;
+import net.nightwhistler.htmlspanner.handlers.SuperScriptHandler;
+import net.nightwhistler.htmlspanner.handlers.attributes.AlignmentAttributeHandler;
+import net.nightwhistler.htmlspanner.handlers.attributes.BorderAttributeHandler;
+import net.nightwhistler.htmlspanner.handlers.attributes.StyleAttributeHandler;
+import net.nightwhistler.htmlspanner.style.Style;
+import net.nightwhistler.htmlspanner.style.StyleValue;
 
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.ContentNode;
@@ -72,6 +72,10 @@ public class HtmlSpanner {
     private Map<String, TagNodeHandler> handlers;
 
     private boolean stripExtraWhiteSpace = false;
+
+    private boolean preserveFormatting = true;
+
+    private boolean replaceWithNormalSpace = false;
 
     private HtmlCleaner htmlCleaner;
 
@@ -140,6 +144,22 @@ public class HtmlSpanner {
      */
     public boolean isStripExtraWhiteSpace() {
         return stripExtraWhiteSpace;
+    }
+
+    public boolean isPreserveFormatting() {
+        return preserveFormatting;
+    }
+
+    public void setPreserveFormatting(boolean preserveFormatting) {
+        this.preserveFormatting = preserveFormatting;
+    }
+
+    public boolean isReplaceWithNormalSpace() {
+        return replaceWithNormalSpace;
+    }
+
+    public void setReplaceWithNormalSpace(boolean replaceWithNormalSpace) {
+        this.replaceWithNormalSpace = replaceWithNormalSpace;
     }
 
     /**
@@ -284,7 +304,6 @@ public class HtmlSpanner {
         return result;
     }
 
-    //移除开头末尾换行
     private SpannableStringBuilder trimEndsEmptyLine(SpannableStringBuilder result) {
         if (result.length() <= 2) {
             return result;
@@ -340,9 +359,9 @@ public class HtmlSpanner {
 
         ContentNode contentNode = (ContentNode) node;
 
-        String text = TextUtil.replaceHtmlEntities(contentNode.getContent().toString(), true);
+        String text = TextUtil.replaceHtmlEntities(contentNode.getContent().toString(), preserveFormatting);
 
-        if (isStripExtraWhiteSpace()) {
+        if (isReplaceWithNormalSpace()) {
             //Replace unicode non-breaking space with normal space.
             text = text.replace('\u00A0', ' ');
         }
@@ -386,7 +405,6 @@ public class HtmlSpanner {
         handler.handleTagNode(node, builder, lengthBefore, lengthAfter, stack);
     }
 
-    //查找html  title
     private boolean findTitle(TagNode tagNode) {
         if (TITLE_TAG.equalsIgnoreCase(tagNode.getName())) {
             for (Object childNode : tagNode.getChildren()) {
@@ -442,7 +460,7 @@ public class HtmlSpanner {
 
         registerHandler("br", brHandler);
 
-        Style paragraphStyle = new Style().setDisplayStyle(Style.DisplayStyle.BLOCK).setMarginBottom(new StyleValue(1.0f, StyleValue.Unit.EM));
+        Style paragraphStyle = new Style().setDisplayStyle(Style.DisplayStyle.BLOCK);
 
         TagNodeHandler pHandler = new BorderAttributeHandler(wrap(new StyledTextHandler(paragraphStyle)));
 

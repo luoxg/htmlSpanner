@@ -1,14 +1,14 @@
-package com.luo.htmlspanner.handlers;
+package net.nightwhistler.htmlspanner.handlers;
 
 import android.text.SpannableStringBuilder;
 
-import com.luo.htmlspanner.LogUtil;
-import com.luo.htmlspanner.SpanStack;
-import com.luo.htmlspanner.TagNodeHandler;
-import com.luo.htmlspanner.spans.VerticalMarginSpan;
-import com.luo.htmlspanner.style.Style;
-import com.luo.htmlspanner.style.StyleCallback;
-import com.luo.htmlspanner.style.StyleValue;
+import net.nightwhistler.htmlspanner.LogUtil;
+import net.nightwhistler.htmlspanner.SpanStack;
+import net.nightwhistler.htmlspanner.TagNodeHandler;
+import net.nightwhistler.htmlspanner.spans.VerticalMarginSpan;
+import net.nightwhistler.htmlspanner.style.Style;
+import net.nightwhistler.htmlspanner.style.StyleCallback;
+import net.nightwhistler.htmlspanner.style.StyleValue;
 
 import org.htmlcleaner.TagNode;
 
@@ -78,9 +78,7 @@ public class StyledTextHandler extends TagNodeHandler {
     public void handleTagNode(TagNode node, SpannableStringBuilder builder, int start, int end, Style useStyle, SpanStack stack) {
 
         if (useStyle.getDisplayStyle() == Style.DisplayStyle.BLOCK) {
-            if (end > start) {
-                appendNewLine(builder);
-            }
+            appendNewLine(builder);
 
             //If we have a bottom margin, we insert an extra newline. We'll manipulate the line height
             //of this newline to create the margin.
@@ -90,17 +88,13 @@ public class StyledTextHandler extends TagNodeHandler {
 
                 if (styleValue.getUnit() == StyleValue.Unit.PX) {
                     if (styleValue.getIntValue() > 0) {
-                        if (end > start) {
-                            appendNewLine(builder);
-                            stack.pushSpan(new VerticalMarginSpan(styleValue.getIntValue()), builder.length() - 1, builder.length());
-                        }
+                        appendNewLine(builder);
+                        stack.pushSpan(new VerticalMarginSpan(styleValue.getIntValue()), builder.length() - 1, builder.length());
                     }
                 } else {
                     if (styleValue.getFloatValue() > 0f) {
-                        if (end > start) {
-                            appendNewLine(builder);
-                            stack.pushSpan(new VerticalMarginSpan(styleValue.getFloatValue()), builder.length() - 1, builder.length());
-                        }
+                        appendNewLine(builder);
+                        stack.pushSpan(new VerticalMarginSpan(styleValue.getFloatValue()), builder.length() - 1, builder.length());
                     }
                 }
             }
